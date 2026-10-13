@@ -1,0 +1,32 @@
+# Standardized Partial S3 Remote Backend Configuration for OpenTofu
+# ==============================================================================
+# Compatible with Hetzner Object Storage, MinIO, Ceph, and AWS S3.
+#
+# Root module usage:
+# Copy this block into your root `versions.tf` or `backend.tf`.
+# Dynamic parameters (bucket, endpoint, key) should be injected at runtime via:
+#   tofu init -backend-config="bucket=<bucket>" -backend-config="endpoint=<endpoint>"
+#
+# Credentials should be supplied via standard environment variables:
+#   export AWS_ACCESS_KEY_ID="<access_key>"
+#   export AWS_SECRET_ACCESS_KEY="<secret_key>"
+# ==============================================================================
+
+terraform {
+  backend "s3" {
+    # Key should be set to your project's unique state path, e.g. "my-project/state.tfstate"
+    key = "terraform.tfstate"
+
+    # Enables atomic state locking via conditional writes (OpenTofu 1.10+)
+    # Eliminates the need for an external lock table like DynamoDB
+    use_lockfile = true
+
+    # Non-AWS S3-compatible storage bypasses
+    skip_credentials_validation = true
+    skip_metadata_api_check     = true
+    skip_requesting_account_id  = true
+    skip_region_validation      = true
+    skip_s3_checksum            = true
+    use_path_style              = true
+  }
+}

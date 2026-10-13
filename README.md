@@ -1,6 +1,6 @@
 # tofu-bum
 
-Production-grade, reusable [OpenTofu](https://opentofu.org) and Terraform modules for Hetzner Cloud infrastructure, ephemeral servers, persistent storage, and network security.
+Production-grade, reusable [OpenTofu](https://opentofu.org) and Terraform modules for cloud infrastructure, ephemeral compute, persistent storage, and network security.
 
 ---
 
@@ -78,10 +78,16 @@ module "server" {
 
 ---
 
+## 🗄️ Remote Backend & State Locking
+
+For production use, see [`templates/backend-s3.tf.example`](templates/backend-s3.tf.example) for a standardized, partial S3 backend configuration with native OpenTofu state locking (`use_lockfile = true`) tested against Hetzner Object Storage.
+
+---
+
 ## 🛡️ Quality Gates & Testing
 
 * **Formatting & Linting**: Enforces `tofu fmt -check` and Trivy IaC configuration scanning via `cabumtain-hook` v1.5.0.
-* **CI Validation**: Automated PR verification executed via `bumuellp/lights-camera-bum-action/pre-commit@v1.5.0`.
+* **CI Validation**: Automated PR verification executed via `bumuellp/lights-camera-bum-action/pre-commit@v1.6.0`.
 
 ---
 
