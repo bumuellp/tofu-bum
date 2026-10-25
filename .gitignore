@@ -1,31 +1,16 @@
-# OpenTofu / Terraform
-.terraform/
-.terraform.lock.hcl
-*.tfstate
-*.tfstate.*
-crash.log
-crash.*.log
-*.tfvars
-*.tfvars.json
-override.tf
-override.tf.json
-*_override.tf
-*_override.tf.json
-.terraformrc
-terraform.rc
+# Dependencies
+node_modules/
+npm-debug.log*
 
-# SOPS / Secrets
-*.enc.yaml
-*.enc.yml
-*.dec.yaml
-*.dec.yml
-secrets.yaml
-secrets.yml
-*.key
-*.age
+# Tooling and caches
+.cache/
+.pre-commit/
 
-# OS & IDE
+# OS and Editor files
 .DS_Store
 Thumbs.db
 .idea/
 .vscode/
+*.swp
+*.swo
+*~
