@@ -11,6 +11,7 @@ Production-grade, reusable [OpenTofu](https://opentofu.org) and Terraform module
 | **[`modules/hcloud-volume`](modules/hcloud-volume/)** | Persistent Hetzner Cloud block volume with delete protection and predictable device paths. | [Docs](modules/hcloud-volume/) |
 | **[`modules/hcloud-firewall`](modules/hcloud-firewall/)** | Dynamic Hetzner Cloud firewall rule generator with protocol and port filtering. | [Docs](modules/hcloud-firewall/) |
 | **[`modules/hcloud-ephemeral-server`](modules/hcloud-ephemeral-server/)** | Ephemeral server compute provisioner with automatic volume attachment and cloud-init injection. | [Docs](modules/hcloud-ephemeral-server/) |
+| **[`modules/proxmox-k3s-lxc`](modules/proxmox-k3s-lxc/)** | Privileged Proxmox VE LXC provisioner for K3s with native GPU `device_passthrough` and host bind mounts. | [Docs](modules/proxmox-k3s-lxc/) |
 
 ---
 
