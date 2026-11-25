@@ -2,14 +2,14 @@ resource "proxmox_virtual_environment_container" "this" {
   node_name     = var.node_name
   vm_id         = var.vm_id
   description   = var.description
-  tags          = var.tags
+  tags          = sort(distinct(var.tags))
   unprivileged  = var.unprivileged
   start_on_boot = var.start_on_boot
   started       = var.started
 
   features {
     nesting = var.nesting
-    keyctl  = var.keyctl
+    keyctl  = var.unprivileged ? var.keyctl : null
   }
 
   operating_system {
@@ -39,14 +39,17 @@ resource "proxmox_virtual_environment_container" "this" {
   initialization {
     hostname = var.hostname
 
-    dns {
-      servers = var.dns_servers
+    dynamic "dns" {
+      for_each = length(var.dns_servers) > 0 ? [1] : []
+      content {
+        servers = var.dns_servers
+      }
     }
 
     ip_config {
       ipv4 {
         address = var.ipv4_address
-        gateway = var.ipv4_gateway
+        gateway = var.ipv4_address == "dhcp" ? null : var.ipv4_gateway
       }
     }
 
@@ -74,8 +77,25 @@ resource "proxmox_virtual_environment_container" "this" {
     content {
       volume    = mount_point.value.volume
       path      = mount_point.value.path
+      size      = startswith(mount_point.value.volume, "/") ? null : mount_point.value.size
       read_only = mount_point.value.read_only
-      backup    = mount_point.value.backup
+      backup    = startswith(mount_point.value.volume, "/") ? null : mount_point.value.backup
+    }
+  }
+
+  wait_for_ip {
+    ipv4 = var.started && var.wait_for_ipv4
+  }
+
+  lifecycle {
+    precondition {
+      condition     = !(var.keyctl && !var.unprivileged)
+      error_message = "Proxmox only supports keyctl = true on unprivileged containers (unprivileged = true)."
+    }
+
+    precondition {
+      condition     = !(var.ipv4_address == "dhcp" && var.ipv4_gateway != null)
+      error_message = "ipv4_gateway must be null when ipv4_address is 'dhcp'."
     }
   }
 }
