@@ -16,6 +16,11 @@ lxc.apparmor.profile: unconfined
 lxc.prlimit.memlock: unlimited
 ```
 
+> [!CAUTION]
+> **Security Trade-off (`unconfined` AppArmor)**: Combining `unprivileged = false` with `lxc.apparmor.profile: unconfined` disables host-side AppArmor MAC enforcement—root inside the LXC is effectively equivalent to root on the Proxmox host (a trust boundary comparable to bare-metal K3s). Treat the LXC as a single-tenant node and enforce isolation inside Kubernetes (`runAsNonRoot: true`, `allowPrivilegeEscalation: false`, `capabilities.drop: ["ALL"]`, `seccompProfile: RuntimeDefault`, and default-deny `NetworkPolicy`).
+>
+> For stricter host-side defense-in-depth, replace `unconfined` with a custom Proxmox host AppArmor profile extending `lxc-container-default-with-nesting` (allowing `overlay`/`tmpfs`/`rshared` mounts, `/dev/kfd`, `/dev/dri/**`, and `/proc/sys/net/**`). Validate any custom profile in complain mode (`aa-complain`) and inspect `dmesg | grep apparmor` before enforcing, as nested `containerd` or kernel upgrades can introduce new denials.
+
 ## Example Usage (with AMD GPU Passthrough)
 
 ```hcl
