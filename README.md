@@ -87,8 +87,9 @@ For production use, see [`templates/backend-s3.tf.example`](templates/backend-s3
 
 ## 🛡️ Quality Gates & Testing
 
-* **Formatting & Linting**: Enforces `tofu fmt -check` and Trivy IaC configuration scanning via `cabumtain-hook` v1.5.0.
-* **CI Validation**: Automated PR verification executed via `bumuellp/lights-camera-bum-action/pre-commit@v1.6.0`.
+* **Formatting & Linting**: Enforces `tofu fmt -check` and Trivy IaC configuration scanning via [`cabumtain-hook`](.pre-commit-config.yaml).
+* **CI Validation**: Automated PR verification executed via [`bumuellp/lights-camera-bum-action`](.github/workflows/ci.yml).
+* **Module Validate & Test**: [`.github/workflows/module-test.yml`](.github/workflows/module-test.yml) calls `bumuellp/lights-camera-bum-action/.github/workflows/tofu-test.yml` to run `tofu init -backend=false`, `tofu validate`, and `tofu test` (when `*.tftest.hcl` or `*.tftest.json` files exist) across every `modules/*` directory. `tofu validate` and `tofu test` are intentionally omitted from local `pre-commit` hooks because they require `tofu init` (downloading provider binaries over the network), which slows down commits and breaks offline workflows.
 
 ---
 

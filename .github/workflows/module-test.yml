@@ -1,0 +1,17 @@
+---
+name: Module Validate & Test
+
+"on":
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  module-test:
+    uses: bumuellp/lights-camera-bum-action/.github/workflows/tofu-test.yml@f3a56d7e2665b172cba490c805e21ad4a5b3fe23  # v1.17.0
+    with:
+      modules-glob: "modules/*"

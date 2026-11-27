@@ -20,3 +20,8 @@ repos:
       - id: trivy-fs
       - id: tag-immutability-guard
       - id: tofu-fmt
+      # Note: Do NOT add `tofu validate` or `tofu test` to pre-commit hooks.
+      # Both require `tofu init` (downloading provider binaries online),
+      # which slows down local commits and breaks offline workflows.
+      # Module validation and `.tftest.hcl` tests run in
+      # `.github/workflows/module-test.yml`.
